@@ -1,7 +1,7 @@
 import React from 'react'
 import Category from './category'
 import './categories.css'
-import Search from '../../widgets/components/search';
+import Search from '../../widgets/containers/search';
 
 function Categories(props){
 	console.log(props.categories);
