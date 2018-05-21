@@ -4,11 +4,13 @@ import Categories from '../../categories/components/categories'
 import Related from '../components/related'
 import ModalContainer from '../../widgets/containers/modal'
 import Modal  from "../../widgets/components/modal";
+import HandleError from "../../error/containers/handle-error"
 
 class Home extends Component {
 
 	state = {
 		modalVisible: false,
+		handleError: false
 	}
 
 	handleOpenModal = (event) => {
@@ -23,10 +25,20 @@ class Home extends Component {
 		})
 	}
 
+	componentDidCatch(error, info){
+		this.setState({
+			handleError: true
+		})
+	}
+
 	render(){
 		console.log(this.props.data.categories)
+		if( this.state.handleError) {
+			return <p> OHHH hay un error :(</p>
+		}
 		return (
-			<HomeLayout>
+			<HandleError>
+				<HomeLayout>
 				<Related />
 				<Categories categories={this.props.data.categories} handleOpenModal={this.handleOpenModal}></Categories>
 				{
@@ -39,6 +51,7 @@ class Home extends Component {
 					</ModalContainer>
 				}
 			</HomeLayout>
+			</HandleError>
 		)
 	}
 }
