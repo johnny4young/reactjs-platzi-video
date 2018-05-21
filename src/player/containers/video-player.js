@@ -7,6 +7,7 @@ import Timer from '../components/timer'
 import VideoPlayerControls from '../components/video-player-controls'
 
 import Formating from '../../utilities/formating'
+import ProgressBar from '../components/progress-bar';
 
 class VideoPlayer extends Component {
 	state = {
@@ -30,7 +31,7 @@ class VideoPlayer extends Component {
 	handleLoadedMetadata = event => {
 		this.video = event.target;
 		this.setState({
-			duration: Formating.formattedTime(this.video.duration.toString())
+			duration: this.video.duration
 		});
 
 	}
@@ -38,19 +39,29 @@ class VideoPlayer extends Component {
 	handleTimeUpdate = event => {
 		console.log(this.video.currentTime);
 		this.setState({
-			currentTime: Formating.formattedTime(this.video.currentTime.toString())
+			currentTime: this.video.currentTime
 		})
 	}
 
+	handleProgressChange = event =>  {
+		this.video.currentTime = event.target.value;
+	}
+
 	render(){
+		const durationFormatted = Formating.formattedTime(this.state.duration.toString());
+		const currentTimeFormatted = Formating.formattedTime(this.state.currentTime.toString());
 		return (
 			<VideoPlayerLayout>
 				<Title 
 				title="feo"/>
 				<VideoPlayerControls>
 					<PlayPause pause={this.state.pause} handleClick={this.handleToggleClick}/>
-					<Timer duration={this.state.duration} currentTime={this.state.currentTime}/>
-				</VideoPlayerControls>
+					<Timer duration={durationFormatted} currentTime={currentTimeFormatted} />
+					<ProgressBar 
+						duration={this.state.duration}
+						value={this.state.currentTime}
+						handleProgressChange={this.handleProgressChange}/>
+				</VideoPlayerControls >
 				
 				<Video
 					handleLoadedMetadata={this.handleLoadedMetadata}
