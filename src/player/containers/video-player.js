@@ -8,12 +8,16 @@ import VideoPlayerControls from '../components/video-player-controls'
 
 import Formating from '../../utilities/formating'
 import ProgressBar from '../components/progress-bar';
+import Spinner from '../components/spinner';
+import Volume from '../components/volume'
+
 
 class VideoPlayer extends Component {
 	state = {
 		pause: true,
 		duration: 0,
-		currentTime: 0
+		currentTime: 0,
+		loading: false,
 	}
 
 	handleToggleClick = () => {
@@ -47,6 +51,22 @@ class VideoPlayer extends Component {
 		this.video.currentTime = event.target.value;
 	}
 
+	handleSeeked = event => {
+		this.setState({
+			loading: false
+		})
+	}
+
+	handleSeeking = event => {
+		this.setState({
+			loading: true
+		})
+	}
+
+	handleVolumeChange = event => {
+		this.video.volume = event.target.value; 
+	}
+
 	render(){
 		const durationFormatted = Formating.formattedTime(this.state.duration.toString());
 		const currentTimeFormatted = Formating.formattedTime(this.state.currentTime.toString());
@@ -61,13 +81,17 @@ class VideoPlayer extends Component {
 						duration={this.state.duration}
 						value={this.state.currentTime}
 						handleProgressChange={this.handleProgressChange}/>
-				</VideoPlayerControls >
+					<Volume handleVolumeChange={this.handleVolumeChange}/>
+				</VideoPlayerControls>
 				
+				<Spinner active={this.state.loading}/>
 				<Video
 					handleLoadedMetadata={this.handleLoadedMetadata}
 					handleTimeUpdate={this.handleTimeUpdate}
 					autoplay={this.props.autoplay}
 					pause={this.state.pause}
+					handleSeeking={this.handleSeeking}
+					handleSeeked={this.handleSeeked}
 					src="http://download.blender.org/peach/bigbuckbunny_movies/BigBuckBunny_320x180.mp4"
 					/>
 			 </VideoPlayerLayout>
