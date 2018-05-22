@@ -7,10 +7,11 @@ import Timer from '../components/timer'
 import VideoPlayerControls from '../components/video-player-controls'
 
 import Formating from '../../utilities/formating'
+import {isFullScreen, requestFullScreen, exitFullScreen } from '../../utilities/fullscreen'
 import ProgressBar from '../components/progress-bar';
 import Spinner from '../components/spinner';
 import Volume from '../components/volume'
-
+import FullScreen from '../components/full-screen'
 
 class VideoPlayer extends Component {
 	state = {
@@ -67,11 +68,27 @@ class VideoPlayer extends Component {
 		this.video.volume = event.target.value; 
 	}
 
+	handleFullScreenClick = event => {
+		console.log('doing zoom');
+		console.log('condition? ', isFullScreen());
+		if ( isFullScreen() ) {
+			exitFullScreen()
+		}
+		else{
+			requestFullScreen(this.player);
+		}
+	}
+
+	setRef = element => {
+		this.player = element;
+	}
+
 	render(){
 		const durationFormatted = Formating.formattedTime(this.state.duration.toString());
 		const currentTimeFormatted = Formating.formattedTime(this.state.currentTime.toString());
 		return (
-			<VideoPlayerLayout>
+			<VideoPlayerLayout
+			 setRef={this.setRef}>
 				<Title 
 				title="feo"/>
 				<VideoPlayerControls>
@@ -82,6 +99,9 @@ class VideoPlayer extends Component {
 						value={this.state.currentTime}
 						handleProgressChange={this.handleProgressChange}/>
 					<Volume handleVolumeChange={this.handleVolumeChange}/>
+					<FullScreen 
+					handleFullScreenClick={this.handleFullScreenClick}
+					/>
 				</VideoPlayerControls>
 				
 				<Spinner active={this.state.loading}/>
