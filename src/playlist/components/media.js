@@ -8,13 +8,15 @@ class Media extends PureComponent {
 		this.state = {
 			author : 'Johnny IV Young O'
 		}
-		//this.handleClick = this.handleClick.bind(this);
+		this.handleClick = this.handleClick.bind(this);
 	}
 
-	// handleClick(event){
+	 handleClick(event){
 	// 	this.setState({ author : 'Carolina Ponce'});
 	// 	console.log(this.props.title);
-	// }
+		this.props.openModal(this.props);
+
+	}
 	render(){
 		const style = {
 			container:{
@@ -27,7 +29,7 @@ class Media extends PureComponent {
 			}
 		}
 		return (
-			<div className="Media" onClick={this.props.handleClick}>
+			<div className="Media" onClick={this.handleClick}>
 				<div className="Media-cover">
 					<img 
 						src={this.props.cover}
